@@ -66,10 +66,12 @@ export function createCreatures(scene: THREE.Scene) {
     m.onBeforeCompile = shader => {
       shader.uniforms.swimTime = time; shader.uniforms.swimPhase = phase; shader.uniforms.swimEffort = effort;
       shader.uniforms.swimFreq = { value: opts.freq ?? 7 }; shader.uniforms.swimAmp = { value: opts.amp ?? .09 }; shader.uniforms.swimSpots = { value: opts.spots ? 1 : 0 };
-      shader.vertexShader = 'uniform float swimTime,swimPhase,swimEffort,swimFreq,swimAmp;varying vec3 swWorld;varying vec3 swLocal;\n' + shader.vertexShader.replace('#include <begin_vertex>', `#include <begin_vertex>
+      shader.vertexShader = 'uniform float swimTime,swimPhase,swimEffort,swimFreq,swimAmp;varying vec3 swWorld;varying vec3 swLocal;\n#ifdef USE_INSTANCING\nattribute float aSwimSeed;\n#endif\n' + shader.vertexShader.replace('#include <begin_vertex>', `#include <begin_vertex>
+        // A fixed per-fish seed. Deriving it from the moving instance position made
+        // the phase jump every frame (scaled by elapsed time), so tails fluttered.
         float seed=swimPhase;
         #ifdef USE_INSTANCING
-         seed+=instanceMatrix[3].x*3.1+instanceMatrix[3].z*1.7;
+         seed+=aSwimSeed;
         #endif
         swLocal=position;
         float tailW=smoothstep(.35,-.75,position.x);
@@ -101,7 +103,8 @@ export function createCreatures(scene: THREE.Scene) {
     const c = new THREE.CatmullRomCurve3(pts, true, 'centripetal'); c.arcLengthDivisions = 200; c.updateArcLengths(); return c;
   }
   function school(kind: string, schools: number, per: number, size: number, depth: number, speed: number, salt: number, amp = .09) {
-    const g = geometry(fishGeometry(LOOKS[kind])); const m = swimMaterial(kind, { amp });
+    const g = geometry(fishGeometry(LOOKS[kind])); const m = swimMaterial(kind, { amp, freq: 5.5 });
+    g.setAttribute('aSwimSeed', new THREE.InstancedBufferAttribute(Float32Array.from({ length: schools * per }, (_, i) => hash(salt * 17 + i) * TAU), 1));
     const inst = new THREE.InstancedMesh(g, m, schools * per); inst.userData.underwater = true; inst.castShadow = true; inst.frustumCulled = false; root.add(inst);
     let n = 0;
     for (let sIdx = 0; sIdx < schools; sIdx++) {
