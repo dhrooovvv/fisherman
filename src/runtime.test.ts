@@ -1,7 +1,7 @@
 import {test} from 'node:test';
 import {strict as assert} from 'node:assert';
 import {createRuntime} from './runtime.ts';
-import {initial,demoInput} from '../../game/fishing.ts';
+import {initial,demoInput} from './game/fishing.ts';
 const empty={keys:[]};
 test('fixed clock gives identical catches at 30, 60, 90, 120 and 144 Hz',()=>{
  const states=[30,60,90,120,144].map(hz=>{

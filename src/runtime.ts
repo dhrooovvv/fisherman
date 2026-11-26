@@ -1,5 +1,5 @@
-import { initial, step } from '../../game/fishing.ts';
-import type { FishingEvent, FishingInput, FishingState } from '../../game/fishing.ts';
+import { initial, step } from './game/fishing.ts';
+import type { FishingEvent, FishingInput, FishingState } from './game/fishing.ts';
 
 export const FIXED_SECONDS = 1 / 60;
 export const MAX_DELTA_SECONDS = .1;

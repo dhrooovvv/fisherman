@@ -1,1 +1,33 @@
-<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="icon" href="./favicon.svg"><title>slackwater</title></head><body><main id="game"><canvas id="scene" aria-label="fishing lagoon"></canvas><header><span>slackwater</span><div><button id="mute" aria-label="toggle sound">sound off</button><span id="counter">fish · 0</span></div></header><section id="welcome"><h1>stay a little.</h1><p>click the water to row. double-click to cast.<br>watch for a dip. hold to reel; release to ease tension.</p><button id="start">go fishing</button></section><div id="tension" hidden><label for="strain">line tension</label><meter id="strain" min="0" max="1" low="0.2" high="0.75" optimum="0.5"></meter><small id="progress"></small></div><aside id="catch" aria-live="polite" hidden></aside><footer><span id="hint">a quiet moment on the water</span><button id="action" hidden>cast</button></footer><p id="error" role="alert" hidden></p></main><script type="module" src="/src/main.ts"></script></body></html>
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<link rel="icon" href="./favicon.svg">
+<title>Slackwater</title>
+</head>
+<body>
+<main id="game">
+  <canvas id="scene" aria-label="a quiet fishing lagoon"></canvas>
+  <div class="glow" aria-hidden="true"></div>
+  <div class="vignette" aria-hidden="true"></div>
+  <button id="mute" class="chip" aria-label="toggle sound" hidden>sound off</button>
+  <section id="welcome">
+    <h1>Slackwater</h1>
+    <p>row the lagoon. cast where the weed is thick.<br>wait for the dip, then reel it home.</p>
+    <button id="start" class="badge">go fishing</button>
+  </section>
+  <aside id="catch" class="card" aria-live="polite" hidden>
+    <div class="card-top"><span class="card-icon"></span><span id="catch-size"></span></div>
+    <h2 id="catch-name"></h2>
+    <p id="catch-note"></p>
+  </aside>
+  <div id="tension" hidden><div class="track"><div id="strain"></div><div id="landed"></div></div></div>
+  <div id="counter" class="chip" hidden><span id="counter-fish"></span><b id="counter-n">0</b></div>
+  <p id="hint" hidden></p>
+  <button id="action" class="badge" hidden>cast</button>
+  <p id="error" role="alert" hidden></p>
+</main>
+<script type="module" src="/src/main.ts"></script>
+</body>
+</html>
